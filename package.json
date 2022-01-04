@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "prepublishOnly": "npm run build",
-    "prepare": "npm run build",
+    "prepare": "npm run build-outline && npm run build-solid && npm run build-vue",
     "build": "npm run build-outline && npm run build-solid && npm run build-react && npm run build-vue",
     "build-react": "node ./scripts/build.js react",
     "build-vue": "node ./scripts/build.js vue",
