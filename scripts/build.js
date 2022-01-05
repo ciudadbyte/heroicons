@@ -79,7 +79,9 @@ async function buildIcons(package, style, format) {
 
   await fs.mkdir(outDir, { recursive: true })
 
+  console.log(`Getting icons ${package} / ${style} / ${format}`)
   let icons = await getIcons(style)
+  console.log(`Icons got ${package} / ${style} / ${format}`)
 
   await Promise.all(
     icons.flatMap(async ({ componentName, svg }) => {
