@@ -47,9 +47,11 @@ let transform = {
 }
 
 async function getIcons(style) {
+  console.log(`Getting icons ${style}`)
   let files = await fs.readdir(`./optimized/${style}`)
   return Promise.all(
     files.map(async (file) => ({
+      console.log(`Reading file ${file} @ ${style}`)
       svg: await fs.readFile(`./optimized/${style}/${file}`, 'utf8'),
       componentName: `${camelcase(file.replace(/\.svg$/, ''), {
         pascalCase: true,
