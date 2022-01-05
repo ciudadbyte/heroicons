@@ -47,20 +47,14 @@ let transform = {
 }
 
 async function getIcons(style) {
-  console.log(`Get icons ${style}`)
   let files = await fs.readdir(`./optimized/${style}`)
-  console.log(files)
-  console.log(`${style} optimized dir readed`)
   return Promise.all(
-    files.map(async (file) => {
-      console.log(`Reading file ${file} @ ${style}`)
-      return {
-        svg: await fs.readFile(`./optimized/${style}/${file}`, 'utf8'),
-        componentName: `${camelcase(file.replace(/\.svg$/, ''), {
-          pascalCase: true,
-        })}Icon`,
-      }
-    })
+    files.map(async (file) => ({
+      svg: await fs.readFile(`./optimized/${style}/${file}`, 'utf8'),
+      componentName: `${camelcase(file.replace(/\.svg$/, ''), {
+        pascalCase: true,
+      })}Icon`,
+    }))
   )
 }
 
@@ -77,7 +71,6 @@ function exportAll(icons, format, includeExtension = true) {
 }
 
 async function buildIcons(package, style, format) {
-  console.log(`Building icons ${package} / ${style} / ${format}`)
   let outDir = `./${package}/${style}`
   if (format === 'esm') {
     outDir += '/esm'
@@ -85,9 +78,7 @@ async function buildIcons(package, style, format) {
 
   await fs.mkdir(outDir, { recursive: true })
 
-  console.log(`Getting icons ${package} / ${style} / ${format}`)
   let icons = await getIcons(style)
-  console.log(`Icons gotten ${package} / ${style} / ${format}`)
 
   await Promise.all(
     icons.flatMap(async ({ componentName, svg }) => {
@@ -97,8 +88,6 @@ async function buildIcons(package, style, format) {
           ? `import * as React from 'react';\ndeclare function ${componentName}(props: React.ComponentProps<'svg'>): JSX.Element;\nexport default ${componentName};\n`
           : `import { RenderFunction } from 'vue';\ndeclare const ${componentName}: RenderFunction;\nexport default ${componentName};\n`
 
-      console.log(`Writing ${package} / ${style} / ${format} > ${outDir} > ${componentName}`)
-
       return [
         fs.writeFile(`${outDir}/${componentName}.js`, content, 'utf8'),
         ...(types ? [fs.writeFile(`${outDir}/${componentName}.d.ts`, types, 'utf8')] : []),
@@ -106,13 +95,9 @@ async function buildIcons(package, style, format) {
     })
   )
 
-  console.log(`Building finished`)
-
-  console.log(`Writing file ${outDir}`)
   await fs.writeFile(`${outDir}/index.js`, exportAll(icons, format), 'utf8')
 
   await fs.writeFile(`${outDir}/index.d.ts`, exportAll(icons, 'esm', false), 'utf8')
-  console.log(`Finishing writing file ${outDir}`)
 }
 
 function main(package) {
