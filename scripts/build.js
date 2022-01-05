@@ -71,7 +71,7 @@ function exportAll(icons, format, includeExtension = true) {
 }
 
 async function buildIcons(package, style, format) {
-  console.log(`building icons ${package} / ${style} / ${format}`)
+  console.log(`Building icons ${package} / ${style} / ${format}`)
   let outDir = `./${package}/${style}`
   if (format === 'esm') {
     outDir += '/esm'
@@ -96,9 +96,13 @@ async function buildIcons(package, style, format) {
     })
   )
 
+  console.log(`Building finished`)
+
+  console.log(`Writing file ${outDir}`)
   await fs.writeFile(`${outDir}/index.js`, exportAll(icons, format), 'utf8')
 
   await fs.writeFile(`${outDir}/index.d.ts`, exportAll(icons, 'esm', false), 'utf8')
+  console.log(`Finishing writing file ${outDir}`)
 }
 
 function main(package) {
