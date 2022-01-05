@@ -47,8 +47,9 @@ let transform = {
 }
 
 async function getIcons(style) {
-  console.log(`Getting icons ${style}`)
+  console.log(`Get icons ${style}`)
   let files = await fs.readdir(`./optimized/${style}`)
+  console.log(files)
   console.log(`${style} optimized dir readed`)
   return Promise.all(
     files.map(async (file) => {
