@@ -57,7 +57,8 @@ async function getIcons(style) {
         componentName: `${camelcase(file.replace(/\.svg$/, ''), {
           pascalCase: true,
         })}Icon`,
-      })
+      }
+    })
   )
 }
 
