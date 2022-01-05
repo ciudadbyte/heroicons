@@ -105,6 +105,7 @@ function main(package) {
 
   Promise.all([rimraf(`./${package}/outline/*`), rimraf(`./${package}/solid/*`)])
     .then(() =>
+      console.log(`Starting to build icons of ${package}`)
       Promise.all([
         buildIcons(package, 'solid', 'esm'),
         buildIcons(package, 'solid', 'cjs'),
