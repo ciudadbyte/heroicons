@@ -50,13 +50,14 @@ async function getIcons(style) {
   console.log(`Getting icons ${style}`)
   let files = await fs.readdir(`./optimized/${style}`)
   return Promise.all(
-    files.map(async (file) => ({
+    files.map(async (file) => {
       console.log(`Reading file ${file} @ ${style}`)
-      svg: await fs.readFile(`./optimized/${style}/${file}`, 'utf8'),
-      componentName: `${camelcase(file.replace(/\.svg$/, ''), {
-        pascalCase: true,
-      })}Icon`,
-    }))
+      return {
+        svg: await fs.readFile(`./optimized/${style}/${file}`, 'utf8'),
+        componentName: `${camelcase(file.replace(/\.svg$/, ''), {
+          pascalCase: true,
+        })}Icon`,
+      })
   )
 }
 
@@ -83,7 +84,7 @@ async function buildIcons(package, style, format) {
 
   console.log(`Getting icons ${package} / ${style} / ${format}`)
   let icons = await getIcons(style)
-  console.log(`Icons got ${package} / ${style} / ${format}`)
+  console.log(`Icons gotten ${package} / ${style} / ${format}`)
 
   await Promise.all(
     icons.flatMap(async ({ componentName, svg }) => {
