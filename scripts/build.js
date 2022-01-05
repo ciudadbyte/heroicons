@@ -71,6 +71,7 @@ function exportAll(icons, format, includeExtension = true) {
 }
 
 async function buildIcons(package, style, format) {
+  console.log(`building icons ${package} / ${style} / ${format}`)
   let outDir = `./${package}/${style}`
   if (format === 'esm') {
     outDir += '/esm'
@@ -105,7 +106,6 @@ function main(package) {
 
   Promise.all([rimraf(`./${package}/outline/*`), rimraf(`./${package}/solid/*`)])
     .then(() =>
-      console.log(`Starting to build icons of ${package}`)
       Promise.all([
         buildIcons(package, 'solid', 'esm'),
         buildIcons(package, 'solid', 'cjs'),
